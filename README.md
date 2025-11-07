@@ -36,3 +36,8 @@ Siga os passos abaixo para preparar o ambiente:
 
 ```bash
 npm install
+
+### Iniciar o projeto
+
+```bash
+npm run dev
