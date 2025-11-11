@@ -5,6 +5,7 @@ import Chat from './pages/Chat'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import CriarUsers from './pages/CriarUsers';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Join />} />
           <Route path='/chat' element={<Chat />} />
+          <Route path='/criarusers' element={<CriarUsers />} />
           <Route path='*' element={<h1>Rota não encontrada</h1>} />
         </Routes>
       </BrowserRouter>
