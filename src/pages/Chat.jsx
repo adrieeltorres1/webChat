@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addMessage } from '../chat/chatSlice'; 
+
 const Chat = () => {
     const dispatch = useDispatch();
     const { nickname, socket, messages } = useSelector((state) => state.chat); 
@@ -43,6 +44,7 @@ const Chat = () => {
         const messageData = {
             author: nickname,
             message: message.trim(), 
+            room: roomName
         };
 
         socket.emit('send_message', messageData);

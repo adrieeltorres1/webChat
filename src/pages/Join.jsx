@@ -37,7 +37,7 @@ const Join = () => {
             const socket = io.connect('http://localhost:5001');
             socket.emit('set_username', data.username);
             dispatch(setConnection({ nickname: data.username, socket }));
-            navigate('/chat');
+            navigate('/rooms');
 
         } catch (err) {
             setError(err.message);
@@ -46,10 +46,8 @@ const Join = () => {
 
     return (
         <div className='flex items-center justify-center min-h-screen'>
-            {/* 9. Use <form> e onSubmit para o login */}
             <form onSubmit={handleLogin} className='text-white flex flex-col items-center gap-6 p-8 rounded-lg shadow-2xl bg-[#1e1e1e] w-80 sm:w-96'>
                 <h1 className='text-4xl font-bold mb-4'>Entrar no Chat</h1>
-
                 <input
                     type="text"
                     placeholder='Insira seu usuário'

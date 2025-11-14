@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Alert } from 'antd'; // Usando o 'antd' como na sua tela de Join
-
+import { Alert } from 'antd'; 
 const CriarUsers = () => {
     const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState(''); // Boa prática
+    const [confirmPassword, setConfirmPassword] = useState(''); 
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
     const handleRegister = async (e) => {
-        e.preventDefault(); // Evita o refresh da página
+        e.preventDefault(); 
         setError(null);
         setSuccess(null);
 
@@ -39,7 +38,6 @@ const CriarUsers = () => {
                 throw new Error(data.message || 'Falha ao criar usuário.');
             }
 
-            // 5. SUCESSO!
             setSuccess('Conta criada com sucesso! Redirecionando para o login...');
 
             setTimeout(() => {
@@ -78,7 +76,6 @@ const CriarUsers = () => {
                     className='p-3 w-full rounded-md bg-[#2a2a2a] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1DB954]'
                 />
 
-                {/* Feedback de Erro */}
                 {error && (
                     <Alert
                         message={error}
@@ -90,7 +87,6 @@ const CriarUsers = () => {
                     />
                 )}
 
-                {/* Feedback de Sucesso */}
                 {success && (
                     <Alert
                         message={success}
@@ -100,7 +96,6 @@ const CriarUsers = () => {
                     />
                 )}
                 
-                {/* Link para voltar ao Login */}
                 <nav className='list-none'>
                     <li>
                         <p className='flex items-center gap-1'>
@@ -114,7 +109,7 @@ const CriarUsers = () => {
 
                 <button
                     type="submit"
-                    disabled={!!success} // Desabilita o botão após o sucesso
+                    disabled={!!success}
                     className='w-full p-3 rounded-md bg-[#1DB954] text-white font-bold hover:bg-[#1ed760] transition-colors disabled:opacity-50'
                 >
                     Criar Conta
