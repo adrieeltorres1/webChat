@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addMessage } from '../chat/chatSlice'; 
 
 const Chat = () => {
     const dispatch = useDispatch();
     const { nickname, socket, messages } = useSelector((state) => state.chat); 
-    
     const navigate = useNavigate();
+
+    const {roomName} = useParams();
+
     const chatContainerRef = useRef(null);
     const [message, setMessage] = useState(''); 
+
+
 
     useEffect(() => {
         if (chatContainerRef.current) {
@@ -19,6 +23,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (socket) {
+            socket.emit('join_room', roomName);
             socket.off('receive_message'); 
             socket.on('receive_message', (data) => {
                 dispatch(addMessage(data)); 
@@ -27,13 +32,10 @@ const Chat = () => {
                 socket.off('receive_message');
             };
         }
-    }, [socket, dispatch]);
+    }, [socket, dispatch, roomName]);
 
     const handleBack = () => {
-        if (socket) {
-            socket.disconnect();
-        }
-        navigate('/');
+        navigate('/rooms');
     }
 
     const handleSend = () => {
@@ -112,7 +114,7 @@ const Chat = () => {
                     onClick={handleBack}
                     className='text-sm text-gray-400 hover:text-[#1ed760] transition duration-300 mt-2'
                 >
-                    Voltar para Login
+                    Voltar para Salas
                 </button>
             </div>
         </div>
