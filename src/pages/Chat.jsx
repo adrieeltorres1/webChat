@@ -1,18 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { addMessage } from '../chat/chatSlice'; 
+import { addMessage } from '../chat/chatSlice';
+
+
+
+
+
 
 const Chat = () => {
     const dispatch = useDispatch();
-    const { nickname, socket, messages } = useSelector((state) => state.chat); 
+    const { nickname, socket, messages } = useSelector((state) => state.chat);
     const navigate = useNavigate();
 
-    const {roomName} = useParams();
+    const { roomName } = useParams();
 
     const chatContainerRef = useRef(null);
-    const [message, setMessage] = useState(''); 
+    const [message, setMessage] = useState('');
 
+
+    const availableRooms = [
+        { id: 'geral', name: 'Sala Principal', desc: 'Conversas gerais' },
+        { id: 'jogos', name: 'Sala de Jogos', desc: 'Discussão sobre games' },
+        { id: 'musica', name: 'Amantes de Música', desc: 'Descubra novos sons' },
+        { id: 'dev', name: 'Devs & Programação', desc: 'Tire suas dúvidas' },
+        { id: 'filmes', name: 'Cinema', desc: 'O que você assistiu?' },
+        { id: 'animes', name: 'Animes & Mangás', desc: 'Discussões de fãs' },
+        { id: 'esportes', name: 'Esportes', desc: 'Resultados e debates' },
+        { id: 'aleatorio', name: 'Aleatório', desc: 'Assuntos variados' },
+    ];
+
+    const currentRoom = availableRooms.find(sala => sala.id === roomName);
+
+    const NameRoom = currentRoom ? currentRoom.name : roomName;
 
 
     useEffect(() => {
@@ -24,9 +44,9 @@ const Chat = () => {
     useEffect(() => {
         if (socket) {
             socket.emit('join_room', roomName);
-            socket.off('receive_message'); 
+            socket.off('receive_message');
             socket.on('receive_message', (data) => {
-                dispatch(addMessage(data)); 
+                dispatch(addMessage(data));
             });
             return () => {
                 socket.off('receive_message');
@@ -45,12 +65,12 @@ const Chat = () => {
 
         const messageData = {
             author: nickname,
-            message: message.trim(), 
+            message: message.trim(),
             room: roomName
         };
 
         socket.emit('send_message', messageData);
-        setMessage(''); 
+        setMessage('');
     }
 
     const handleKeyPress = (e) => {
@@ -63,11 +83,11 @@ const Chat = () => {
         <div className='flex items-center justify-center min-h-screen bg-[#2a2a2a]'>
             <div className='text-white flex flex-col gap-4 p-6 rounded-lg shadow-2xl bg-[#1e1e1e] w-full max-w-lg h-[80vh]'>
                 <h1 className='text-3xl font-bold border-b border-gray-700 pb-2 flex justify-between items-center'>
-                    Sala
+                    {NameRoom}
                     <span className='text-sm font-normal text-[#1DB954]'>Olá, {nickname || 'Convidado'}!</span>
                 </h1>
-                
-                <div 
+
+                <div
                     ref={chatContainerRef}
                     className='grow overflow-y-auto space-y-3 p-2 bg-[#2a2a2a] rounded-lg border border-gray-700'
                 >
@@ -76,11 +96,11 @@ const Chat = () => {
                     ) : (
                         messages.map((msg, index) => (
                             <div key={index} className={`flex ${msg.author === nickname ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-xs p-3 rounded-xl shadow-md ${msg.author === nickname 
-                                    ? 'bg-[#1DB954] text-white rounded-br-none' 
+                                <div className={`max-w-xs p-3 rounded-xl shadow-md ${msg.author === nickname
+                                    ? 'bg-[#1DB954] text-white rounded-br-none'
                                     : 'bg-gray-700 text-white rounded-tl-none'}`}>
                                     <p className='text-xs font-bold mb-1'>{msg.author}</p>
-                                    <p className='text-sm'>{msg.message}</p> 
+                                    <p className='text-sm'>{msg.message}</p>
                                     <span className='text-[10px] text-right block mt-1 opacity-70'>{msg.timestamp}</span>
                                 </div>
                             </div>
@@ -89,9 +109,9 @@ const Chat = () => {
                 </div>
 
                 <div className='flex gap-2 items-center'>
-                    <input 
-                        type="text" 
-                        placeholder='Digite sua mensagem...' 
+                    <input
+                        type="text"
+                        placeholder='Digite sua mensagem...'
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyPress={handleKeyPress}
@@ -99,7 +119,7 @@ const Chat = () => {
                             text-white placeholder-gray-500 focus:outline-none 
                             focus:ring-2 focus:ring-[#1DB954]'
                     />
-                    
+
                     <button
                         onClick={handleSend}
                         className='font-semibold h-10 px-4 text-white text-[16px] 
