@@ -4,10 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addMessage } from '../chat/chatSlice';
 
 
-
-
-
-
 const Chat = () => {
     const dispatch = useDispatch();
     const { nickname, socket, messages } = useSelector((state) => state.chat);
