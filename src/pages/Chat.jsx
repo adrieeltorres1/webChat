@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { addMessage } from '../chat/chatSlice';
+import { addMessage, clearMessages } from '../chat/chatSlice';
 
 
 const Chat = () => {
@@ -38,6 +38,7 @@ const Chat = () => {
     }, [messages]);
 
     useEffect(() => {
+        dispatch(clearMessages());
         if (socket) {
             socket.emit('join_room', roomName);
             socket.off('receive_message');
